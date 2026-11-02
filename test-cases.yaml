@@ -1,0 +1,12 @@
+designer-run:
+  name: dsc-livestock-movement
+  description: The values used with ▶ Run in the designer.
+  params:
+    er_connection:
+      data_source:
+        name: Naboisho Conservancy
+    time_range:
+      since: '2024-01-02T15:19:29'
+      until: '2026-11-25T15:19:38'
+    workflow_details:
+      name: f

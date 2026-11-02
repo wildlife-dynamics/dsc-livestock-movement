@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Technical Guide · dsc-livestock-movement</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="bar">
+      <a class="brand" href="index.html">dsc-livestock-movement</a>
+      <nav>
+        <a href="index.html">Overview</a>
+        <a href="user-guide.html">User Guide</a>
+        <a href="technical-guide.html" class="active">Technical Guide</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <h1>Technical Guide</h1>
+    <p class="lede">The steps dsc-livestock-movement runs, the packages they come from, and how to recompile and test it.</p>
+
+    <h2>Steps</h2>
+    <p>In the order they run. Each step is a task from one of the packages below.</p>
+    <table>
+      <thead><tr><th>#</th><th>Step</th><th>Task</th><th>Group</th><th>What it does</th></tr></thead>
+      <tbody><tr><td>1</td><td><strong>Connect to EarthRanger</strong></td><td><code>set_er_connection</code></td><td></td><td></td></tr><tr><td>2</td><td><strong>Set Time Range</strong></td><td><code>set_time_range</code></td><td></td><td>Choose the period of time to analyze.</td></tr><tr><td>3</td><td><strong>Get Events</strong></td><td><code>get_events</code></td><td></td><td>Get events.</td></tr><tr><td>4</td><td><strong>Process Events Details</strong></td><td><code>process_events_details</code></td><td></td><td>Extracts and processes event details for all events in the DataFrame, resolving enum values from the schema for each event type and mapping keys to titles.</td></tr><tr><td>5</td><td><strong>Normalize Json Column</strong></td><td><code>normalize_json_column</code></td><td></td><td></td></tr><tr><td>6</td><td><strong>Drop Column Prefix</strong></td><td><code>drop_column_prefix</code></td><td></td><td>Remove a prefix from column names in a DataFrame with duplicate handling.</td></tr><tr><td>7</td><td><strong>Decompose Datetime</strong></td><td><code>decompose_datetime</code></td><td></td><td>Decompose a datetime column into its constituent temporal components.</td></tr><tr><td>8</td><td><strong>Map Columns</strong></td><td><code>map_columns</code></td><td></td><td>Maps and transforms the columns of a DataFrame based on the provided parameters. The order of the operations is as follows: drop columns, retain/reorder columns, and rename columns.</td></tr><tr><td>9</td><td><strong>Validate Block Movements</strong></td><td><code>validate_block_movements</code></td><td></td><td></td></tr><tr><td>10</td><td><strong>Map Columns</strong></td><td><code>map_columns</code></td><td></td><td>Maps and transforms the columns of a DataFrame based on the provided parameters. The order of the operations is as follows: drop columns, retain/reorder columns, and rename columns.</td></tr><tr><td>11</td><td><strong>Persist Df</strong></td><td><code>persist_df</code></td><td></td><td>Persist dataframe to a file or cloud storage object.</td></tr><tr><td>12</td><td><strong>Draw Table</strong></td><td><code>draw_table</code></td><td></td><td>Creates an HTML table of the provided dataframe.</td></tr><tr><td>13</td><td><strong>Persist Text</strong></td><td><code>persist_text</code></td><td></td><td>Persist text to a file or cloud storage object.</td></tr><tr><td>14</td><td><strong>Create Table Widget Single View</strong></td><td><code>create_table_widget_single_view</code></td><td></td><td>Create a table widget with a single view.</td></tr><tr><td>15</td><td><strong>Merge Widget Views</strong></td><td><code>merge_widget_views</code></td><td></td><td>Merge widgets with the same `title` and `widget_type`.</td></tr><tr><td>16</td><td><strong>Set Workflow Details</strong></td><td><code>set_workflow_details</code></td><td></td><td>Add information that will help to differentiate this workflow from another.</td></tr><tr><td>17</td><td><strong>Set Groupers</strong></td><td><code>set_groupers</code></td><td></td><td></td></tr><tr><td>18</td><td><strong>Gather Dashboard</strong></td><td><code>gather_dashboard</code></td><td></td><td></td></tr></tbody>
+    </table>
+
+    <h2>Task packages</h2>
+    <table>
+      <thead><tr><th>Package</th><th>Version</th><th>Channel</th></tr></thead>
+      <tbody><tr><td><code>ecoscope-platform</code></td><td>==2.27.1</td><td>https://repo.prefix.dev/ecoscope-workflows/</td></tr><tr><td><code>ecoscope-workflows-ext-custom</code></td><td>==0.1.5</td><td>https://repo.prefix.dev/ecoscope-workflows-custom/</td></tr><tr><td><code>ecoscope-workflows-ext-distance-sample-counts</code></td><td>==1.1.5.dev3+g495efa9e9.d20261102</td><td>file:///tmp/ecoscope-workflows-custom/release/artifacts/</td></tr></tbody>
+    </table>
+
+    <h2>Recompiling</h2>
+    <p><code>spec.yaml</code> is the source; <code>ecoscope-workflows-dsc-livestock-movement-workflow/</code> is generated from it by wt-compiler.</p>
+    <pre><code>./dev/recompile.sh --update   # keeps the lock file and bumps VERSION.yaml
+./dev/recompile.sh --install  # a new lock file, and the packages installed</code></pre>
+
+    <h2>Testing</h2>
+    <p>Each case in <code>test-cases.yaml</code> runs the workflow with its settings:</p>
+    <pre><code>pixi run --manifest-path pixi.toml -e default bash dev/pytest-cli.sh dsc_livestock_movement --all</code></pre>
+  </main>
+
+  <footer class="site-footer">
+    <p>dsc-livestock-movement &middot; Wildlife Dynamics</p>
+  </footer>
+</body>
+</html>
