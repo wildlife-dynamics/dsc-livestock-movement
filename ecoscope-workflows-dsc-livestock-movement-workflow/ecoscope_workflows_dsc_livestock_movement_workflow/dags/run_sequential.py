@@ -44,10 +44,10 @@ def main(params: dict[str, Any], validate_params_schema: bool = True):
     if validate_params_schema:
         _validate(params, _metadata.load_params_schema())
 
-    er_connection = (
-        task(set_er_connection)
+    workflow_details = (
+        task(set_workflow_details)
         .validate()
-        .set_task_instance_id("er_connection")
+        .set_task_instance_id("workflow_details")
         .handle_errors()
         .with_tracing()
         .skipif(
@@ -57,7 +57,24 @@ def main(params: dict[str, Any], validate_params_schema: bool = True):
             ],
             unpack_depth=1,
         )
-        .partial(**(params.get("er_connection") or {}))
+        .partial(**(params.get("workflow_details") or {}))
+        .call()
+    )
+
+    groupers = (
+        task(set_groupers)
+        .validate()
+        .set_task_instance_id("groupers")
+        .handle_errors()
+        .with_tracing()
+        .skipif(
+            conditions=[
+                any_is_empty_df,
+                any_dependency_skipped,
+            ],
+            unpack_depth=1,
+        )
+        .partial(groupers=None, **(params.get("groupers") or {}))
         .call()
     )
 
@@ -75,6 +92,23 @@ def main(params: dict[str, Any], validate_params_schema: bool = True):
             unpack_depth=1,
         )
         .partial(time_format="%d %b %Y %H:%M:%S", **(params.get("time_range") or {}))
+        .call()
+    )
+
+    er_connection = (
+        task(set_er_connection)
+        .validate()
+        .set_task_instance_id("er_connection")
+        .handle_errors()
+        .with_tracing()
+        .skipif(
+            conditions=[
+                any_is_empty_df,
+                any_dependency_skipped,
+            ],
+            unpack_depth=1,
+        )
+        .partial(**(params.get("er_connection") or {}))
         .call()
     )
 
@@ -401,40 +435,6 @@ def main(params: dict[str, Any], validate_params_schema: bool = True):
             widgets=[table_movement_widget_view],
             **(params.get("merged_table_movement_views") or {}),
         )
-        .call()
-    )
-
-    workflow_details = (
-        task(set_workflow_details)
-        .validate()
-        .set_task_instance_id("workflow_details")
-        .handle_errors()
-        .with_tracing()
-        .skipif(
-            conditions=[
-                any_is_empty_df,
-                any_dependency_skipped,
-            ],
-            unpack_depth=1,
-        )
-        .partial(**(params.get("workflow_details") or {}))
-        .call()
-    )
-
-    groupers = (
-        task(set_groupers)
-        .validate()
-        .set_task_instance_id("groupers")
-        .handle_errors()
-        .with_tracing()
-        .skipif(
-            conditions=[
-                any_is_empty_df,
-                any_dependency_skipped,
-            ],
-            unpack_depth=1,
-        )
-        .partial(groupers=None, **(params.get("groupers") or {}))
         .call()
     )
 

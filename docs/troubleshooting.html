@@ -35,6 +35,28 @@
       <p>Names typed into the settings (a subject group, an event type) must match the data source exactly, including capitals. Widen the time range if it's short.</p>
     </div>
 
+    <h2>The report</h2>
+
+    <div class="error-block">
+      <p class="symptom">The run fails with a missing column: Community/Zone, FROM or TO</p>
+      <p>The columns are named by the field titles of the <code>livestock_block_movement</code> event type. If a title was changed in EarthRanger, change it back, or update the column names in <code>spec.yaml</code> and recompile.</p>
+    </div>
+
+    <div class="error-block">
+      <p class="symptom">The table is empty</p>
+      <p>There are no <code>livestock_block_movement</code> events in the time range on that site. Check the range and the data source.</p>
+    </div>
+
+    <div class="error-block">
+      <p class="symptom">A movement that looks right is a Missed movement</p>
+      <p>It's compared with the movement before it <em>by time</em>, named in its status. Check that movement: a wrong date, often a year typo, puts it out of order, and a movement between the two may not have been entered.</p>
+    </div>
+
+    <div class="error-block">
+      <p class="symptom">Every Community/Zone starts with a First record</p>
+      <p>The first movement in the time range has nothing before it to compare with. Start the range before the survey you want to check.</p>
+    </div>
+
     <h2>Developing</h2>
 
     <div class="error-block">

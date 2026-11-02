@@ -3,7 +3,6 @@
 [workspace]
 name = "ecoscope-workflows-dsc-livestock-movement-workflow"
 channels = [
-    "file:///tmp/ecoscope-workflows-custom/release/artifacts/",
     "https://repo.prefix.dev/ecoscope-workflows-custom/",
     "https://repo.prefix.dev/ecoscope-workflows/",
     "conda-forge",
@@ -29,8 +28,8 @@ version = "==0.1.5"
 channel = "https://repo.prefix.dev/ecoscope-workflows-custom/"
 
 [dependencies.ecoscope-workflows-ext-distance-sample-counts]
-version = "==1.1.5.dev3+g495efa9e9.d20261102"
-channel = "file:///tmp/ecoscope-workflows-custom/release/artifacts/"
+version = "1.1.5.*"
+channel = "https://repo.prefix.dev/ecoscope-workflows-custom/"
 
 [dependencies.pydeck]
 version = "==0.9.2"
@@ -154,5 +153,5 @@ solve-group = "test"
 no-default-feature = true
 
 [tasks]
-docker-build = "mkdir -p .tmp/ecoscope-workflows/release/artifacts/\n&& cp -r /tmp/ecoscope-workflows/release/artifacts/* .tmp/ecoscope-workflows/release/artifacts/\n&& docker buildx build -t ecoscope-workflows-dsc-livestock-movement-workflow .\n"
+docker-build = "docker buildx build -t ecoscope-workflows-dsc-livestock-movement-workflow ."
 ecoscope-workflows-dsc-livestock-movement-workflow = "python -m ecoscope_workflows_dsc_livestock_movement_workflow.cli"

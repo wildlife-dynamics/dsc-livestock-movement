@@ -27,28 +27,44 @@
     <p>In the workflow runner, add a new template using this repository's URL, then select <strong>dsc-livestock-movement</strong> from the templates list.</p>
 
     <h2>2. Data sources</h2>
-    <ul><li>Access to a <strong>EarthRanger</strong> data source, set up as a connection</li></ul>
+    <ul><li>Access to an <strong>EarthRanger</strong> data source, set up as a connection, with a <code>livestock_block_movement</code> event type whose fields are titled <strong>Community/Zone</strong>, <strong>FROM</strong> and <strong>TO</strong></li></ul>
 
     <h2>3. Settings</h2>
-    <p>The run form asks for these. Fields with a default can be left as they are.</p>
-    <h3>Connect to EarthRanger</h3>
+    <p>The run form asks for these, in this order. Fields with a default can be left as they are.</p>
+    <h3>Set Workflow Details</h3>
     <table>
       <thead><tr><th>Field</th><th>Description</th><th>Default</th></tr></thead>
-      <tbody><tr><td>Data source <em>(required)</em></td><td>Select one of your configured data sources.</td><td>—</td></tr></tbody>
+      <tbody><tr><td>Workflow Name <em>(required)</em></td><td>Shown on the dashboard.</td><td>—</td></tr><tr><td>Workflow Description</td><td>Shown on the dashboard.</td><td><code></code></td></tr></tbody>
     </table>
     <h3>Set Time Range</h3>
     <table>
       <thead><tr><th>Field</th><th>Description</th><th>Default</th></tr></thead>
       <tbody><tr><td>Since <em>(required)</em></td><td>The start time</td><td>—</td></tr><tr><td>Until <em>(required)</em></td><td>The end time</td><td>—</td></tr><tr><td>Timezone</td><td></td><td>—</td></tr></tbody>
     </table>
-    <h3>Set Workflow Details</h3>
+    <p>The first movement of each Community/Zone in the range is a <em>First record</em> and isn't checked, so start the range a little before the survey you want to check.</p>
+    <h3>Connect to EarthRanger</h3>
     <table>
       <thead><tr><th>Field</th><th>Description</th><th>Default</th></tr></thead>
-      <tbody><tr><td>Workflow Name <em>(required)</em></td><td></td><td>—</td></tr><tr><td>Workflow Description</td><td></td><td><code></code></td></tr></tbody>
+      <tbody><tr><td>Data source <em>(required)</em></td><td>Select one of your configured data sources.</td><td>—</td></tr></tbody>
     </table>
 
     <h2>4. Run it and find the results</h2>
-    <p>The workflow writes its files to the results folder the runner gives it (<code>ECOSCOPE_WORKFLOWS_RESULTS</code>), and shows its dashboard when it finishes.</p>
+    <p>The workflow writes <code>livestock_movement_validation.csv</code> to the results folder the runner gives it (<code>ECOSCOPE_WORKFLOWS_RESULTS</code>), and shows the <em>Livestock Movement Validation</em> table on its dashboard when it finishes.</p>
+    <p>The report has one row per movement: Serial Number, Previous Serial Number, Date, Previous Date, From, To, Community/Zone, Status and <code>is_issue</code>. Filter on <code>is_issue</code> to see only the problems.</p>
+    <h3>Statuses</h3>
+    <p>Movements are sorted by time within each Community/Zone. A movement can have more than one status, joined with <code>;</code>.</p>
+    <table>
+      <thead><tr><th>Status</th><th>Meaning</th><th>An issue?</th></tr></thead>
+      <tbody><tr><td>Valid movement</td><td>FROM matches the previous movement's TO</td><td>No</td></tr><tr><td>First record</td><td>The first movement for that Community/Zone in the time range, with nothing to compare with</td><td>No</td></tr><tr><td>Missed movement: expected FROM [&hellip;] (#serial, date)</td><td>FROM doesn't match the previous movement's TO, which is shown with its serial number and date</td><td>Yes</td></tr><tr><td>No movement</td><td>FROM and TO are the same blocks</td><td>Yes</td></tr><tr><td>Empty FROM or TO</td><td>One side has no blocks</td><td>Yes</td></tr><tr><td>Duplicate entry</td><td>Same Community/Zone, date, FROM and TO as another movement</td><td>Yes</td></tr></tbody>
+    </table>
+
+    <h2>5. Fix what it finds</h2>
+    <p>Open each flagged movement in EarthRanger by its serial number and correct it there, then run the workflow again.</p>
+    <ul>
+      <li><strong>Missed movement</strong>: look at this movement and the one named in its status. Often one of them has a wrong date (a year typo moves it out of order), or a movement between them was never entered.</li>
+      <li><strong>Duplicate entry</strong>: the same movement was entered twice; remove one.</li>
+      <li><strong>Empty FROM or TO</strong> / <strong>No movement</strong>: fill in or correct the blocks.</li>
+    </ul>
   </main>
 
   <footer class="site-footer">

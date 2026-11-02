@@ -1,19 +1,24 @@
 {
   "properties": {
-    "er_connection": {
+    "workflow_details": {
       "additionalProperties": false,
       "properties": {
-        "data_source": {
-          "$ref": "#/$defs/EarthRangerConnection",
-          "description": "Select one of your configured data sources.",
-          "title": ""
+        "name": {
+          "title": "Workflow Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Workflow Description",
+          "type": "string"
         }
       },
       "required": [
-        "data_source"
+        "name"
       ],
       "type": "object",
-      "title": "Connect to EarthRanger"
+      "description": "Add information that will help to differentiate this workflow from another.",
+      "title": "Set Workflow Details"
     },
     "time_range": {
       "additionalProperties": false,
@@ -44,41 +49,23 @@
       "description": "Choose the period of time to analyze.",
       "title": "Set Time Range"
     },
-    "workflow_details": {
+    "er_connection": {
       "additionalProperties": false,
       "properties": {
-        "name": {
-          "title": "Workflow Name",
-          "type": "string"
-        },
-        "description": {
-          "default": "",
-          "title": "Workflow Description",
-          "type": "string"
+        "data_source": {
+          "$ref": "#/$defs/EarthRangerConnection",
+          "description": "Select one of your configured data sources.",
+          "title": ""
         }
       },
       "required": [
-        "name"
+        "data_source"
       ],
       "type": "object",
-      "description": "Add information that will help to differentiate this workflow from another.",
-      "title": "Set Workflow Details"
+      "title": "Connect to EarthRanger"
     }
   },
   "$defs": {
-    "EarthRangerConnection": {
-      "properties": {
-        "name": {
-          "title": "Data Source",
-          "type": "string"
-        }
-      },
-      "required": [
-        "name"
-      ],
-      "title": "EarthRangerConnection",
-      "type": "object"
-    },
     "TimezoneInfo": {
       "properties": {
         "label": {
@@ -106,20 +93,33 @@
       ],
       "title": "TimezoneInfo",
       "type": "object"
+    },
+    "EarthRangerConnection": {
+      "properties": {
+        "name": {
+          "title": "Data Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "EarthRangerConnection",
+      "type": "object"
     }
   },
   "uiSchema": {
+    "workflow_details": {
+      "ui:order": [
+        "name",
+        "description"
+      ]
+    },
     "time_range": {
       "ui:order": [
         "since",
         "until",
         "timezone"
-      ]
-    },
-    "workflow_details": {
-      "ui:order": [
-        "name",
-        "description"
       ]
     },
     "ui:order": [
